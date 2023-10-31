@@ -94,6 +94,80 @@ void displayAllCharacters(const std::vector<Hero*>& characters) {
     }
 }
 
+void saveToFile(const std::vector<Hero*>& characters, const std::string& filename) {
+    std::ofstream outFile(filename);
+    if (!outFile.is_open()) {
+        std::cerr << "\nОшибка открытия файла для записи.\n" << std::endl;
+        return;
+    }
+
+    for (const auto& character : characters) {
+        outFile << character->getName() << " "
+            << character->getWeapon() << " "
+            << character->getSkills() << std::endl;
+    }
+
+    std::cout << "\nДанные успешно сохранены в файл.\n" << std::endl;
+    outFile.close();
+}
+
+void loadFromFile(std::vector<Hero*>& characters, const std::string& filename) {
+    std::ifstream inFile(filename);
+    if (!inFile.is_open()) {
+        std::cerr << "\nОшибка открытия файла для чтения: " << filename << "\n" << std::endl;
+        return;
+    }
+
+    for (auto& character : characters) {
+        delete character;
+    }
+    characters.clear();
+
+    std::string type;
+    if (filename.find("heroes.txt") != std::string::npos) {
+        while (inFile >> type) {
+            std::string name, weapon, skills;
+            inFile >> name >> weapon;
+            std::getline(inFile >> std::ws, skills);
+            GoodHero* newHero = new GoodHero(name, weapon, skills);
+            characters.push_back(newHero);
+        }
+    }
+    else if (filename.find("villains.txt") != std::string::npos) {
+        while (inFile >> type) {
+            std::string name, weapon, skills, evilDeed, hideout;
+            inFile >> name >> weapon;
+            std::getline(inFile >> std::ws, skills);
+            inFile >> evilDeed >> hideout;
+            Villain* newVillain = new Villain(name, weapon, skills, evilDeed, hideout);
+            characters.push_back(newVillain);
+        }
+    }
+    else if (filename.find("monsters.txt") != std::string::npos) {
+        while (inFile >> type) {
+            std::string name, description;
+            inFile >> name;
+            std::getline(inFile >> std::ws, description);
+            Monster* newMonster = new Monster(name, description);
+            characters.push_back(newMonster);
+        }
+    }
+    else {
+        std::cerr << "\nОшибка: неизвестный тип файла: " << filename << "\n" << std::endl;
+        inFile.close();
+        return;
+    }
+
+    if (inFile.fail() && !inFile.eof()) {
+        std::cerr << "\nОшибка чтения данных из файла: " << filename << "\n" << std::endl;
+    }
+    else {
+        std::cout << "\nДанные успешно загружены из файла: " << filename << "\n" << std::endl;
+    }
+
+    inFile.close();
+}
+
 int main() {
     SetConsoleOutputCP(1251);
 
