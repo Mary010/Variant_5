@@ -1,0 +1,6 @@
+﻿  AEROFLOT.cpp
+  Keeper.cpp
+  main.cpp
+C:\Users\kivy1\OneDrive\Рабочий стол\УНИК\3 курс 1 сем\Прога\var5\var5\main.cpp(27,9): warning C4065: оператор switch содержит метку "default", но не содержит ни одной метки "case"
+  Создание кода...
+  var5.vcxproj -> C:\Users\kivy1\OneDrive\Рабочий стол\УНИК\3 курс 1 сем\Прога\var5\x64\Debug\var5.exe
